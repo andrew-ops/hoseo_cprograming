@@ -24,11 +24,13 @@ void outbound();
 void eachstat();
 int low_lv_warn();
 void allstat();
+void save();
+void load();
 
 int main(){
     int num = 0,z = 0;
     while (z == 0){
-        printf("원하는 메뉴를 선택하세요. 1.입고 2.출고 3.개별현황 4.전체현황 5.종료");
+        printf("원하는 메뉴를 선택하세요. 1.입고 2.출고 3.개별현황 4.전체현황 5.저장 6.불러오기 7.종료 \n");
         scanf("%d",&num);
         
         switch (num){
@@ -48,10 +50,24 @@ int main(){
             allstat();
             z = 0;
             break;
-        default:
+        case 5:
+            save();
+            z = 0;
+            break;
+        case 6:
+            load();
+            z = 0;
+            break;
+        case 7:
             z = 1;
             break;
+        default:
+            printf("잘못된 입력입니다. 다시 입력해 주세요\n");
+            z = 0;
+            break;
+
         }
+        
     }
 }
 
@@ -164,4 +180,27 @@ void allstat(){
     printf("가장 많이 판매된 상품 : ID %d, 상품명:%s 판매량 %d\n", g.id[max], g.name[max], g.obamt[max]);
     printf("가장 적게 판매된 상품 : ID %d, 상품명:%s 판매량 %d\n", g.id[min], g.name[min], g.obamt[min]);
     low_lv_warn();
+}
+void save(){
+    FILE *fp = NULL;
+    fp = fopen("gift.dat","wb");
+    if(fp == NULL){
+        printf("파일 열기 오류\n");
+        return;
+    }
+    fwrite(&g, sizeof(struct gift), 1, fp);
+    printf("저장 완료\n");
+    fclose(fp);
+
+}
+void load(){
+    FILE *fp = NULL;
+    fp = fopen("gift.dat","rb");
+    if(fp == NULL){
+        printf("파일 열기 오류\n");
+        return;
+    }
+    printf("불러오기 완료\n");
+    fread(&g, sizeof(struct gift), 1, fp);
+    fclose(fp);
 }
