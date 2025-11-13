@@ -20,17 +20,22 @@ struct gift g = {0, };
 
 void inbound(void);
 int sameid(void);
+void editgiftinfo(void);
+
 void outbound();
+
 void eachstat();
+
 int low_lv_warn();
 void allstat();
+
 void save();
 void load();
 
 int main(){
     int num = 0,z = 0;
     while (z == 0){
-        printf("원하는 메뉴를 선택하세요. 1.입고 2.출고 3.개별현황 4.전체현황 5.저장 6.불러오기 7.종료 \n");
+        printf("원하는 메뉴를 선택하세요. 1.입고 2.출고 3.개별현황 4.전체현황 5.저장 6.불러오기 7.제품정보 변경 8.종료 \n");
         scanf("%d",&num);
         
         switch (num){
@@ -59,6 +64,10 @@ int main(){
             z = 0;
             break;
         case 7:
+            editgiftinfo();
+            z = 0;
+            break;
+        case 8:
             z = 1;
             break;
         default:
@@ -100,16 +109,33 @@ void inbound(void){
             printf("더 이상 물품을 추가할 수 없습니다.\n");
             return;
         }
+        printf("상품명");
+        scanf("%s", g.name[same]);/*이미 있는 아이디 경우 상품명 &상품가격 물어보지 않게*/ 
+        printf("입고량");
+        scanf("%d", &ibamt);
+        printf("판매가격");
+        scanf("%d", &g.price[same]);
     }
-    printf("상품명");
-    scanf("%s", g.name[same]);
-    printf("입고량");
-    scanf("%d", &ibamt);
-    printf("판매가격");
-    scanf("%d", &g.price[same]);
+    else{
+        printf("입고량");
+        scanf("%d",&ibamt);
+    }
     g.ibamt[same]+=ibamt;
     g.totalibamt+=ibamt;
     g.stk[same]+=ibamt;
+}
+void editgiftinfo(void){
+    int same;
+    same = sameid();
+    if(same < 0){
+        printf("잘못된 입력입니다. 존재하는 ID를 입력해 주세요\n");
+    }
+    else{
+        printf("상품명");
+        scanf("%s", g.name[same]);
+        printf("판매가격");
+        scanf("%d", &g.price[same]);
+    }
 }
 
 void outbound(){
